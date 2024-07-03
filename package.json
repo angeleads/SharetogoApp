@@ -1,7 +1,7 @@
 {
   "name": "sharetogonew",
   "version": "1.0.0",
-  "main": "expo/AppEntry.js",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,15 +9,37 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~51.0.14",
+    "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-firebase/app": "^20.1.0",
+    "@rneui/themed": "^4.0.0-rc.8",
+    "expo": "~51.0.17",
+    "expo-constants": "~16.0.2",
+    "expo-dev-client": "~4.0.19",
+    "expo-image-manipulator": "~12.0.5",
+    "expo-image-picker": "~15.0.6",
+    "expo-linear-gradient": "~13.0.2",
+    "expo-linking": "~6.3.1",
+    "expo-location": "~17.0.1",
+    "expo-router": "~3.5.17",
     "expo-status-bar": "~1.12.1",
+    "firebase": "^10.12.2",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.74.2"
+    "react-native": "0.74.2",
+    "react-native-maps": "1.14.0",
+    "react-native-modal-datetime-picker": "^7.6.1",
+    "react-native-safe-area-context": "4.10.1",
+    "react-native-screens": "3.31.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
-    "typescript": "^5.1.3"
+    "babel-preset-expo": "^11.0.11",
+    "tailwindcss": "^3.3.2",
+    "typescript": "~5.3.3"
   },
   "private": true
 }
