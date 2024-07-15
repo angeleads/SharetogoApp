@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, TouchableOpacity, View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import MapCard from '../../../components/inicio/MapCard';
-import TravelCard from '../../../components/inicio/TravelCards';
+import TravelCard from '../../../components/TravelCards';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore'; // Import onSnapshot for realtime updates
@@ -10,7 +10,7 @@ import { auth, db } from '../../../library/firebase';
 import moment from 'moment';
 import _ from 'lodash';
 
-export default function Home() {
+export default function Inicio() {
     const router = useRouter();
     const [travelData, setTravelData] = useState([]);
     const [emptyData, setEmptyData] = useState(true);
@@ -28,40 +28,40 @@ export default function Home() {
     const fetchTravelData = async () => {
         const user = auth.currentUser;
         try {
-        const userId = user?.uid;
-        const userDocRef = doc(collection(db, "users"), userId);
-        const userDocSnapshot = await getDoc(userDocRef);
-    
-        if (userDocSnapshot.exists()) {
-            const userData = userDocSnapshot.data();
-            const reservedTravels = userData.reservedTravels || [];
-    
-            if (reservedTravels.length > 0) {
-            const reservedTravelData = await Promise.all(
-                reservedTravels.map(async (travelId: any) => {
-                const travelDocRef = doc(db, "travels", travelId);
-                const travelDocSnapshot = await getDoc(travelDocRef);
-                if (travelDocSnapshot.exists()) {
-                    const travelData = travelDocSnapshot.data();
-                    if (travelData.status !== 'cancelled') {
-                    return { id: travelId, ...travelData };
+          const userId = user?.uid;
+          const userDocRef = doc(collection(db, "users"), userId);
+          const userDocSnapshot = await getDoc(userDocRef);
+      
+          if (userDocSnapshot.exists()) {
+              const userData = userDocSnapshot.data();
+              const reservedTravels = userData.reservedTravels || [];
+      
+              if (reservedTravels.length > 0) {
+                const reservedTravelData = await Promise.all(
+                    reservedTravels.map(async (travelId: any) => {
+                    const travelDocRef = doc(db, "travels", travelId);
+                    const travelDocSnapshot = await getDoc(travelDocRef);
+                    if (travelDocSnapshot.exists()) {
+                        const travelData = travelDocSnapshot.data();
+                        if (travelData.status !== 'cancelled') {
+                        return { id: travelId, ...travelData };
+                        }
                     }
-                }
-                return null;
-                })
-            );
-    
-            const validReservedTravels = reservedTravelData.filter(
-                (travel) => travel !== null
-            );
-            setTravelData(sortTravelData(validReservedTravels));
-            } else {
-            setTravelData([]);
-            }
-        } else {
-            setEmptyData(true);
-        }
-        setLoading(false);
+                    return null;
+                  })
+              );
+      
+              const validReservedTravels = reservedTravelData.filter(
+                  (travel) => travel !== null
+              );
+              setTravelData(sortTravelData(validReservedTravels));
+              } else {
+              setTravelData([]);
+              }
+          } else {
+              setEmptyData(true);
+          }
+          setLoading(false);
         } catch (error) {
         console.error("Error fetching travel data:", error);
         }

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import TakenPlaces from './TakenPlaces';
-import FromTo from './FromTo';
+import FromTo from './inicio/FromTo';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { auth, db } from '../../library/firebase';
-import { useNavigation } from '@react-navigation/native';
+import { auth, db } from '../library/firebase';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import * as Linking from 'expo-linking';
+import { useNavigation } from '@react-navigation/native';
 
 interface TravelCardsProps {
   onReserve: any;
@@ -104,19 +104,21 @@ export default function TravelCards(props: TravelCardsProps) {
   };
 
   const handleOpenTravelInfo = () => {
-    navigation.navigate('TravelInfo', {
-      title: props.title,
-      time: props.time,
-      from: props.from,
-      to: props.to,
-      totalPlaces: props.totalPlaces,
-      takenPlaces: props.takenPlaces,
-      travelId: props.travelId,
-      travelReservation: props.travelReservation,
-      userId: props.userId,
-      iconName: props.iconName,
-      carModel: props.carModel,
-      buttonText: props.buttonText,
+    navigation.navigate('common/travelInfo', {
+      travelData: {
+        title: props.title,
+        time: props.time,
+        from: props.from,
+        to: props.to,
+        totalPlaces: props.totalPlaces,
+        takenPlaces: props.takenPlaces,
+        travelId: props.travelId,
+        travelReservation: props.travelReservation,
+        userId: props.userId,
+        iconName: props.iconName,
+        carModel: props.carModel,
+        buttonText: props.buttonText,
+      }
     });
   };
 
