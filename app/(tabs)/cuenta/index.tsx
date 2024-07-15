@@ -7,10 +7,11 @@ import { auth, db, storage } from '../../../library/firebase';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { manipulateAsync } from 'expo-image-manipulator';
+import { useRouter } from 'expo-router';
 
-const cuentaPage = () => {
+export default function Cuenta() {
   const navigation = useNavigation();
-
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [name, setName] = useState('');
@@ -443,5 +444,3 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   }
 });
-
-export default cuentaPage;
