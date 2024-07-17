@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
+import { StyleSheet, Image, Button, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert, Platform, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
 import { auth, db } from "../../library/firebase";
 
-const SignUp = () => {
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
+import { useRouter } from 'expo-router';
+
+export default function SignUp() {
+    const route = useRouter();
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -40,8 +47,21 @@ const SignUp = () => {
             console.error("Error: ", error);
         }
     }
+
+    const togglePasswordVisibility = () => {
+        setPasswordHidden(!passwordHidden);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setConfirmPasswordHidden(!confirmPasswordHidden);
+    };
+
+    const togglePrivacyPolicy = () => {
+        setPrivacyPolicyChecked(!privacyPolicyChecked);
+    };
+
         
-    const handleSignUp = async (e: any) => {
+    const handleSubmit = async (e: any) => {
 		e.preventDefault();
         if (!name) {
             setNameError("Introduce tu nombre");
@@ -93,27 +113,314 @@ const SignUp = () => {
         }
     };
 
+    const openURL = async () => {
+        const url = 'https://www.sharetogo.org/privacy';
+        try {
+            const supported = await Linking.canOpenURL(url);
+            if (supported) {
+                await Linking.openURL(url);
+            } else {
+                console.error(`Cannot open URL: ${url}`);
+            }
+        } catch (error) {
+            console.error(`An error occurred: ${error}`);
+        }
+    }
+    const handleGoBack = () => {
+        route.back();
+    };
+
     return (
-        <View className="flex flex-col items-center justify-center h-screen bg-green-500">
-            <Text className="text-3xl font-bold mb-4">¡Registrate!</Text>
-            <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-                className="border border-gray-300 rounded-md px-4 py-2 mb-2 "
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                    <Image
+                        source={require('../../assets/car_logo_sharetogo.png')}
+                        style={styles.image}
+                    />
+                    <Text style={styles.title}>¡Registrate!</Text>
+                    <View style={styles.inputRow}>
+                        <View style={styles.inputWrapper}>
+                            <TextInput
+                                placeholder="Indica tu nombre"
+                                placeholderTextColor={'#808080'}
+                                value={name}
+                                style={styles.textInput}
+                                onChangeText={text => setName(text)}
+                            />
+                            {nameError ? <Text style={styles.shortError}>{nameError}</Text> : null}
+                        </View>
+                        <View style={styles.inputWrapper}>
+                            <TextInput
+                                placeholder="Indica tu apellido"
+                                placeholderTextColor={'#808080'}
+                                value={lastName}
+                                style={styles.textInput}
+                                onChangeText={text => setLastName(text)}
+                            />
+                            {lastNameError ? <Text style={styles.shortError}>{lastNameError}</Text> : null}
+                        </View>
+                    </View>
+                    <View style={styles.inputRow}>
+                        <View style={styles.inputWrapper}>
+                            <TextInput
+                                placeholder="Indica tu teléfono"
+                                placeholderTextColor={'#808080'}
+                                value={phone}
+                                style={styles.textInput}
+                                keyboardType="numeric"
+                                onChangeText={text => setPhone(text)}
+                            />
+                            {phoneError ? <Text style={styles.shortError}>{phoneError}</Text> : null}
+                        </View>
 
-            />
-            <TextInput
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                className="border border-gray-300 rounded-md px-4 py-2 mb-2 "
-            />
-            <Button title="Sign Up" onPress={handleSignUp} />
-            {error ? <Text>{error}</Text> : null}
-        </View>
-    );
-};
+                        <View style={styles.inputWrapper}>
+                            <TextInput
+                                placeholder="Indica tu email"
+                                placeholderTextColor={'#808080'}
+                                value={email}
+                                style={styles.textInput}
+                                onChangeText={text => setEmail(text)}
+                            />
+                            {emailError ? <Text style={styles.shortError}>{emailError}</Text> : null}
+                        </View>
+                    </View>
+                    <View style={styles.passwordInputContainer}>
+                        <TextInput
+                            placeholder="Indica tu contraseña"
+                            placeholderTextColor={'#808080'}
+                            value={password}
+                            onChangeText={setPassword}
+                            style={styles.passwordInput}
+                            secureTextEntry={passwordHidden}
+                            autoCapitalize="none"
+                            autoCompleteType="password"
+                        />
+                        <TouchableOpacity
+                            style={styles.passwordVisibilityButton}
+                            onPress={togglePasswordVisibility}
+                        >
+                            <Ionicons
+                            name={passwordHidden ? 'eye-outline' : 'eye-off-outline'}
+                            size={24}
+                            color="black"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {passwordError ? <Text style={styles.error}>{passwordError}</Text> : null}
+                    <View style={styles.passwordInputContainer}>
+                        <TextInput
+                            placeholder="Confirma tu contraseña"
+                            placeholderTextColor={'#808080'}
+                            value={confirmPassword}
+                            onChangeText={text => setConfirmPassword(text)}
+                            style={styles.passwordInput}
+                            secureTextEntry={confirmPasswordHidden}
+                            autoCapitalize="none"
+                            autoCompleteType="confirmPassword"
+                        />
+                            <TouchableOpacity
+                            style={styles.passwordVisibilityButton}
+                            onPress={toggleConfirmPasswordVisibility}
+                        >
+                            <Ionicons
+                            name={confirmPasswordHidden ? 'eye-outline' : 'eye-off-outline'}
+                            size={24}
+                            color="black"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {confirmPasswordError ? <Text style={styles.error}>{confirmPasswordError}</Text> : null}
+                    <View style={styles.privacyPolicyContainer}>
+                        <TouchableOpacity onPress={togglePrivacyPolicy}>
+                            <Ionicons
+                                name={privacyPolicyChecked ? 'checkmark-circle-outline' : 'ellipse-outline'}
+                                size={30}
+                                color="#2A2C38"
+                                style={styles.checkboxIcon}
+                            />
+                        </TouchableOpacity>
+                            <TouchableOpacity onPress={openURL} >
+                                <Text style={styles.privacyPolicyText}> He leído y acepto la política de privacidad y los términos y condiciones de uso.</Text>
+                            </TouchableOpacity>
+                    </View>
+                    {privacityError ? <Text style={styles.error}>{privacityError}</Text> : null}
+                    <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainerLarge}>
+                        <LinearGradient
+                            colors={['#2A2C38', '#2A2C38']}
+                            start={{x:0, y:0}}
+                            end={{x:1, y:1}}
+                            style={styles.buttonLarge}
+                        >
+                            <Text style={styles.textLarge}>Registrarse</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleGoBack} style={styles.buttonContainerLarge}>
+                        <LinearGradient
+                            colors={['#2A2C38', '#2A2C38']}
+                            start={{x:0, y:0}}
+                            end={{x:1, y:1}}
+                            style={styles.buttonLarge}
+                        >
+                            <Text style={styles.textLarge}>Volver</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+            </View>
+        </TouchableWithoutFeedback>
+        );
+}
 
-export default SignUp;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#9DD187',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    inputRow: {
+        flexDirection: 'row',
+        marginHorizontal: '5%',
+    },
+    inputWrapper: {
+        flex: 1,
+        marginRight: -20,
+    },
+    image: {
+        width: '40%',
+        height: '20%',
+        marginTop: 5,
+      },
+    title: {
+        fontSize: 28,
+        marginBottom: 5,
+        color: '#2A2C38',
+    },
+    image: {
+        width: 250,
+        height: 250,
+        marginBottom: -50,
+        top: -50,
+    },
+    passwordInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        marginTop: 20,
+        borderWidth: 1,
+        borderColor: '#fff',
+        borderRadius: 15,
+        backgroundColor: '#E8F6DF',
+        width: 310,
+        height: 50,
+    },
+    passwordVisibilityButton: {
+        paddingRight: 15,
+    },
+    passwordInput: {
+        flex: 1,
+        height: 40,
+    },
+    text: {
+        top: -100,
+        fontSize: 25,
+        color: 'gray',
+        fontWeight: 900,
+    },
+    header_image: {
+        width: '110%',
+        top: -120,
+    },
+    passwordInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        marginTop: 20,
+        borderWidth: 1,
+        borderColor: '#fff',
+        borderRadius: 15,
+        backgroundColor: '#E8F6DF',
+        width: 330,
+        height: 50,
+    },
+    passwordInput: {
+        flex: 1,
+        height: 40,
+  },
+    passwordVisibilityButton: {
+        paddingRight: 15,
+    },
+    textInput: {
+        paddingStart: 15,
+        paddingEnd: 15,
+        width: 155,
+        height: 50,
+        marginTop: 18,
+        marginLeft: 10,
+        borderWidth: 1,
+        borderColor: '#9DD187',
+        borderRadius: 15,
+        backgroundColor: '#E8F6DF',
+    },
+
+    textLarge: {
+        fontSize: 14,
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    buttonLarge: {
+        width: 300,
+        height: 50,
+        marginTop: 10,
+        alignContent: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        borderRadius: 8,
+    },
+    buttonContainerLarge: {
+        width: 200,
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: -15,
+    },
+    error: {
+        color: 'red',
+        fontSize: 12,
+        fontStyle: 'italic',
+        marginTop: 5,
+        marginBottom: -2,
+        textAlign: 'left',
+        alignSelf: 'center',
+        marginLeft: 55,
+        marginRight: 55,
+    },
+    shortError: {
+        color: 'red',
+        fontSize: 12,
+        fontStyle: 'italic',
+        marginTop: 5,
+        marginBottom: -2,
+        textAlign: 'left',
+        alignSelf: 'center',
+        marginLeft: 25,
+        marginRight: 55,
+    },
+    checkboxIcon: {
+        marginRight: 10,
+    },
+    privacyPolicyContainer:  {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 43,
+        marginTop: 20,
+    },
+    privacyPolicyText: {
+        fontSize: 12,
+        textDecorationLine: 'underline',
+        color: '#2A2C38',
+        marginRight: 50,
+    },
+});

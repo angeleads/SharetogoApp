@@ -8,6 +8,7 @@ import { auth, db } from '../library/firebase';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import * as Linking from 'expo-linking';
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 interface TravelCardsProps {
   onReserve: any;
@@ -26,6 +27,7 @@ interface TravelCardsProps {
 }
 
 export default function TravelCards(props: TravelCardsProps) {
+  const router = useRouter();
   const navigation = useNavigation();
   const [isReserving, setIsReserving] = useState(false);
   const [reservationMessage, setReservationMessage] = useState('');
@@ -104,21 +106,23 @@ export default function TravelCards(props: TravelCardsProps) {
   };
 
   const handleOpenTravelInfo = () => {
-    navigation.navigate('common/travelInfo', {
-      travelData: {
-        title: props.title,
-        time: props.time,
-        from: props.from,
-        to: props.to,
-        totalPlaces: props.totalPlaces,
-        takenPlaces: props.takenPlaces,
-        travelId: props.travelId,
-        travelReservation: props.travelReservation,
-        userId: props.userId,
-        iconName: props.iconName,
-        carModel: props.carModel,
-        buttonText: props.buttonText,
-      }
+    const travelData = {
+      title: props.title,
+      time: props.time,
+      from: props.from,
+      to: props.to,
+      totalPlaces: props.totalPlaces,
+      takenPlaces: props.takenPlaces,
+      travelId: props.travelId,
+      userId: props.userId,
+      iconName: props.iconName,
+      carModel: props.carModel,
+      buttonText: props.buttonText,
+    };
+  
+    router.push({
+      pathname: '/common/travelInfo',
+      params: travelData,
     });
   };
 
@@ -188,6 +192,7 @@ export default function TravelCards(props: TravelCardsProps) {
     </TouchableOpacity>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

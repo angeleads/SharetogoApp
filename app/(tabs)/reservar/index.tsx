@@ -48,8 +48,6 @@ export default function Reservar() {
     }
   };
   
-  
-  
   useEffect(() => {
     fetchTravelData();
   }, []);
@@ -73,7 +71,6 @@ export default function Reservar() {
         const userDocSnapshot = await getDoc(doc(db, 'users', user.uid));
         if (userDocSnapshot.exists()) {
           const userData = userDocSnapshot.data();
-          const reservedTravels = userData.reservedTravels || [];
 
           if (!reservedTravels.includes(travelId)) {
             const updatedReservedTravels = [...reservedTravels, travelId];
@@ -158,8 +155,8 @@ export default function Reservar() {
                   travelReservation={travel.travelReservation}
                   buttonText={
                     travel.reservedTravels && travel.reservedTravels.includes(travel.id)
-                      ? 'Anular'
-                      : 'Reservar'
+                      ? "Anular"
+                      : "Reservar"
                   }
                   takenPlaces={travel.carSeatsTaken === '' ? '0' : travel.carSeatsTaken}
                   travelId={travel.id}
