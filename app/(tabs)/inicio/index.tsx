@@ -122,13 +122,13 @@ export default function Inicio() {
                   </TouchableOpacity>
                 </View>
               ) : (
-                _.sortBy(travelData, [ 'travelDate.title', 'travelTime.time']).map((travel, index) => {
+                _.sortBy(travelData, ['travelDate', 'travelTime']).map((travel, index) => {
                   const titleDate = new Date(travel.travelDate.seconds * 1000 + travel.travelDate.nanoseconds / 1e6);
                   const formattedTitle = titleDate.toLocaleDateString('en-GB');
-
+              
                   const timeDate = new Date(travel.travelTime.seconds * 1000 + travel.travelTime.nanoseconds / 1e6);
-                  const formattedTime = Number(timeDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-
+                  const formattedTime = timeDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              
                   return (
                       <TravelCard
                           key={index}
@@ -143,9 +143,8 @@ export default function Inicio() {
                           totalPlaces={travel.carSeatsAvailable}
                           takenPlaces={travel.carSeatsTaken === '' ? "0" : travel.carSeatsTaken.toString()}
                           iconName="car"
-                          takenPlaces={travel.carSeatsTaken === '' ? "0" : travel.carSeatsTaken.toString()}
                       />
-                  );
+                  );              
               })
               )}
           </>
