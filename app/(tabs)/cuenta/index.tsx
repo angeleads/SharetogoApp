@@ -126,7 +126,9 @@ export default function Cuenta() {
     }
   };
   
+ 
   const handleSelectImage = async () => {
+    console.log("H");
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -142,8 +144,7 @@ export default function Cuenta() {
           { compress: 0.7, format: 'jpeg', base64: false }
         );
 
-        const user = auth.currentUser;
-        const imageFileName = `profile_images/${user?.uid}_${Date.now()}.jpg`;
+        const imageFileName = `profile_images/${auth.currentUser.uid}_${Date.now()}.jpg`;
         const storageRef = ref(storage);
         const imageRef = ref(storageRef, imageFileName);
   
@@ -155,7 +156,8 @@ export default function Cuenta() {
   
         await uploadBytes(imageRef, blobManipulated);
         
-        const docRef = doc(collection(db, 'users'), user?.uid);
+        const user = auth.currentUser;
+        const docRef = doc(db, 'users', user.uid);
         const docSnapshot = await getDoc(docRef);
         
         if (docSnapshot.exists()) {
@@ -255,7 +257,7 @@ export default function Cuenta() {
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
       >
       <View style={styles.profileContainer}>
-        <TouchableOpacity onPress={editor? handleSelectImage: null}>
+      <TouchableOpacity onPress={editor? handleSelectImage: null}>
           {selectedImage ? (
             <Image source={{ uri: selectedImage }} style={styles.profileImage} />
           ) : (

@@ -206,6 +206,7 @@ export default function TravelInfo() {
         setIsLoading(true);
         try {
           const travelDocRef = doc(db, 'travels', travelData.travelId);
+          console.log(travelDocRef);
           const fieldsToUpdate = {
               origine: tempFrom,
               destination: tempTo,

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import TravelCard from '../../../components/TravelCards';
 import { Searchbar } from 'react-native-paper';
-import { collection, getDocs, doc, onSnapshot, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, getDocs, where, doc, onSnapshot, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../../library/firebase';
 import moment from 'moment';
 
 export default function Reservar() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [allTravelData, setAllTravelData] = useState([]);
   const [travelData, setTravelData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -26,19 +27,40 @@ export default function Reservar() {
     setRefreshing(true);
     try {
       const userId = user?.uid;
-      console.log('Fetching travel data for userId:', userId);
-  
-      const travelsQuerySnapshot = await getDocs(collection(db, 'travels'));
-      const travels = travelsQuerySnapshot.docs
-        .map((doc) => {
-          const data = doc.data();
-          return { ...data, id: doc.id };
-        })
-        .filter((travel) => travel.userId !== userId);
-  
-      console.log('Setting travelData with travels:', travels);
-      setTravelData(sortTravelData(travels));
-  
+      const q = query(collection(db, 'users'), where('userId', '==', userId));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        const userDocSnapshot = querySnapshot.docs[0];
+        const userData = userDocSnapshot.data();
+        const reservedTravels = userData.reservedTravels || [];
+
+        const travelsQuerySnapshot = await getDocs(collection(db, 'travels'));
+        const travels = travelsQuerySnapshot.docs
+          .map((doc) => {
+            const data = doc.data();
+            return { ...data, id: doc.id };
+          })
+          .filter((travel) => travel.userId !== userId);
+
+        const travelsWithReservation = travels.map((travel) => ({
+          ...travel,
+          reservedTravels,
+        }));
+        setAllTravelData(sortTravelData(travelsWithReservation));
+        setTravelData(sortTravelData(travelsWithReservation));
+      } else {
+        const querySnapshot = await getDocs(collection(db, 'travels'));
+        const travels = querySnapshot.docs
+          .map((doc) => {
+            const data = doc.data();
+            return { ...data, id: doc.id };
+          })
+          .filter((travel) => travel.userId !== userId);
+
+        setAllTravelData(sortTravelData(travels));
+        setTravelData(sortTravelData(travels));
+      }
       setLoading(false);
       setRefreshing(false);
     } catch (error) {
@@ -53,8 +75,16 @@ export default function Reservar() {
   }, []);
 
   useEffect(() => {
-    console.log('Travel Data before rendering:', travelData);
-  }, [travelData]);
+    const filteredData = allTravelData.filter((travel) => {
+      const searchText = searchQuery.toLowerCase();
+      return (
+        travel.carModel.toLowerCase().includes(searchText) ||
+        travel.origine.toLowerCase().includes(searchText) ||
+        travel.destination.toLowerCase().includes(searchText)
+      );
+    });
+    setTravelData(filteredData);
+  }, [searchQuery, allTravelData]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -71,6 +101,7 @@ export default function Reservar() {
         const userDocSnapshot = await getDoc(doc(db, 'users', user.uid));
         if (userDocSnapshot.exists()) {
           const userData = userDocSnapshot.data();
+          const reservedTravels = userData.reservedTravels || [];
 
           if (!reservedTravels.includes(travelId)) {
             const updatedReservedTravels = [...reservedTravels, travelId];
@@ -171,63 +202,62 @@ export default function Reservar() {
     </View>
   );
 }
-    
-    const styles = StyleSheet.create({
-      container_bar: {
-        backgroundColor: '#fff',
-        elevation: 3,
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: '#333',
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginVertical: 3,
-      },
-      text_mine: {
-        fontSize: 19,
-        fontWeight: '600',
-        marginLeft: 10,
-        marginBottom: 15,
-        marginTop: 15,
-      },
-      search_bar: {
-        marginHorizontal: 10,
-        marginVertical: 12,
-        height: 50,
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: '#333',
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-      },
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-      },
-      text: {
-        fontSize: 19,
-        fontWeight: '600',
-        marginLeft: 10,
-        marginBottom: 15,
-      },
-      textTwo: {
-        fontSize: 17,
-        fontWeight: 600,
-        marginLeft: 10,
-        marginTop: 15,
-        marginBottom: 15,
-      },
-      scrollView: {
-        flexGrow: 1,
-        paddingHorizontal: 20,
-        paddingTop: 10,
-        paddingBottom: 100,
-      },
-      travelList: {
-        flex: 1,
-      },
-      loadingIndicator: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-    });
-    
+
+const styles = StyleSheet.create({
+  container_bar: {
+    backgroundColor: '#fff',
+    elevation: 3,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    marginVertical: 3,
+  },
+  text_mine: {
+    fontSize: 19,
+    fontWeight: '600',
+    marginLeft: 10,
+    marginBottom: 15,
+    marginTop: 15,
+  },
+  search_bar: {
+    marginHorizontal: 10,
+    marginVertical: 12,
+    height: 50,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  text: {
+    fontSize: 19,
+    fontWeight: '600',
+    marginLeft: 10,
+    marginBottom: 15,
+  },
+  textTwo: {
+    fontSize: 17,
+    fontWeight: 600,
+    marginLeft: 10,
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  scrollView: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 100,
+  },
+  travelList: {
+    flex: 1,
+  },
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
