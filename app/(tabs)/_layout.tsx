@@ -23,6 +23,10 @@ const TabsLayout = () => {
                 tabBarIconStyle: {
                     marginTop: 8, // Top margin for the icons
                 },
+                headerStyle: {
+                    backgroundColor: '#9DD187', // Background color of the header
+                },
+                headerTintColor: '#2A2C38', // Optional: set the color of the header text and icons
             }}
         >
             <Tabs.Screen
