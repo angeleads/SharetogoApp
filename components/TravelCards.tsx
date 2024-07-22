@@ -94,16 +94,17 @@ export default function TravelCards(props: TravelCardsProps) {
     }
   };
 
-  const HandleChatIncoming = () => {
-    Alert.alert(
-      'El chat esta en progreso...',
-      '¡Mientras únete a nuestro chat de Telegram para cualquier duda!',
-      [
-        { text: 'Unirse', onPress: () => openURL() },
-        { text: 'Cancelar', onPress: () => console.log('NO Pressed') },
-      ]
-    );
+  const handleChatNavigation = () => {
+    router.push({
+      pathname: '/(chat)/Chat',
+      params: {
+        travelId: props.travelId,
+        userId: auth.currentUser?.uid,
+        creatorId: props.userId,
+      },
+    });
   };
+
 
   const handleOpenTravelInfo = () => {
     const travelData = {
@@ -128,7 +129,7 @@ export default function TravelCards(props: TravelCardsProps) {
 
   const handleButtonPress = () => {
     if (props.buttonText === 'Chat') {
-      HandleChatIncoming();
+      handleChatNavigation();
     } else if (props.buttonText === 'Anular') {
       handleOpenTravelInfo();
     } else if (props.buttonText === 'Reservar') {

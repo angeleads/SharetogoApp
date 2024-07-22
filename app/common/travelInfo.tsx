@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, TextInput, Image, StyleSheet, ScrollView, ActivityIndicator, RefreshControl, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import moment from 'moment';
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../../library/firebase';
-import { useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 

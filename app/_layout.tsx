@@ -26,6 +26,7 @@ const RootLayout = () => {
                     name="(tabs)"
                     options={{
                         headerShown: false,
+                        title: 'Inicio',
                     }}
                 />
             ) : (

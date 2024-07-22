@@ -36,6 +36,7 @@
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.3",
+    "react-native-gifted-chat": "^2.4.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "1.14.0",
     "react-native-modal-datetime-picker": "^7.6.1",
