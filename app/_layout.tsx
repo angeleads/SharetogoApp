@@ -20,20 +20,27 @@ const RootLayout = () => {
     }
 
     return (
-        <Stack>
+        <Stack
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: '#9DD187', // Background color of the header
+            },
+            headerTintColor: '#2A2C38', 
+        }}>
             {currentUser ? (
-                <Stack.Screen
-                    name="(tabs)"
-                    options={{
-                        headerShown: false,
-                        title: 'Inicio',
-                    }}
-                />
+                    <Stack.Screen
+                        name="(tabs)"
+                        options={{
+                            headerShown: false,
+                            title: 'Volver',
+                        }}
+                    />
             ) : (
                 <Stack.Screen
                     name="(auth)"
                     options={{
                         headerShown: false,
+                        title: 'Volver',
                     }}
                 />
             )}

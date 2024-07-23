@@ -122,7 +122,7 @@ export default function TravelCards(props: TravelCardsProps) {
     };
   
     router.push({
-      pathname: '/common/travelInfo',
+      pathname: '/(travelInfo)/travelInfo',
       params: travelData,
     });
   };
