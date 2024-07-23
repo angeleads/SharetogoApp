@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { GiftedChat, IMessage, Bubble, SystemMessage, Send, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, IMessage, Bubble, SystemMessage, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { db, auth } from '../../library/firebase';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { useLocalSearchParams } from 'expo-router';
-import { Image, ImageBackground, View, Text,  StyleSheet} from 'react-native';
+import { Image, ImageBackground, View, Text,  StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -99,6 +99,7 @@ const Chat: React.FC = () => {
             shadowOpacity: 0.3,
             shadowRadius: 3,
             elevation: 4,
+            marginBottom: 5,
             
           },
           left: {
@@ -127,11 +128,21 @@ const Chat: React.FC = () => {
     return (
       <InputToolbar
         {...props}
-        containerStyle={{ backgroundColor: "#edf5ee" }}
+        containerStyle={styles.inputToolbarContainer}
         renderActions={() => (
-          <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', left: 5 }}>
+          <View style={styles.actionContainer}>
             <Ionicons name="add" color="#9DD187" size={28} />
           </View>
+        )}
+        renderComposer={(composerProps) => (
+          <Composer {...composerProps} textInputStyle={styles.composer} />
+        )}
+        renderSend={(sendProps) => (
+          <Send {...sendProps}>
+            <View style={styles.sendContainer}>
+              <Ionicons name="arrow-forward" color="#9DD187" size={28} />
+            </View>
+          </Send>
         )}
       />
     );
@@ -173,11 +184,29 @@ const Chat: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  inputToolbarContainer: {
+    backgroundColor: "#edf5ee",
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  actionContainer: {
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: -8,
+  },
   composer: {
-    backgroundColor: '#FFFFF',
+    flex: 1,
+    backgroundColor: '#FFFFFF',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#FFFFF',
+    borderColor: '#FFFFFF',
     paddingHorizontal: 10,
     paddingTop: 8,
     shadowColor: '#000',
@@ -186,9 +215,23 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     fontSize: 16,
     marginVertical: 4,
+    marginBottom: -8,
+    marginTop: 20,
     height: 40,
   },
+  sendContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    marginBottom: 5,
+  },
+  avatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+  },
 });
+
 
 
 export default Chat;
