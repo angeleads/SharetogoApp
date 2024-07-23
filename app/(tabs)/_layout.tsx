@@ -49,24 +49,24 @@ const TabsLayout = () => {
             />
             <Tabs.Screen
                 name="reservar"
-                options={{
+                options = {{
                     title: 'Reservar',
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="directions-car" color={color} size={30} />
-                    ),
+                        <MaterialIcons name="directions-car" color="green" size={30}/>
+                    )
                 }}
             />
             <Tabs.Screen
                 name="cuenta"
-                options={{
-                    title: 'Cuenta',
+                options = {{
+                    title: 'Cuenta' ,
                     tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5 name="user-alt" color={color} size={25} />
-                    ),
+                        <FontAwesome5 name="user-alt" color="green" size={25} />
+                    )
                 }}
             />
         </Tabs>
-    );
-};
+    )
+}
 
-export default TabsLayout;
+export default TabsLayout

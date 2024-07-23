@@ -6,7 +6,7 @@ import { View, Text, Button, TextInput, TouchableOpacity,  StyleSheet, Dimension
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import car_logo from '../../assets/car_logo_sharetogo.png';
+import car_logo from '@/assets/car_logo_sharetogo.png';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import ResponsiveFontSize from 'react-native-responsive-fontsize';
 import { RFValue } from 'react-native-responsive-fontsize';
