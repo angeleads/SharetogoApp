@@ -96,7 +96,7 @@ export default function TravelCards(props: TravelCardsProps) {
 
   const handleChatNavigation = () => {
     router.push({
-      pathname: '/(chat)/Chat',
+      pathname: '/(chat)',
       params: {
         travelId: props.travelId,
         userId: auth.currentUser?.uid,
@@ -122,7 +122,7 @@ export default function TravelCards(props: TravelCardsProps) {
     };
   
     router.push({
-      pathname: '/common/travelInfo',
+      pathname: '/(travelInfo)',
       params: travelData,
     });
   };

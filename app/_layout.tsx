@@ -3,42 +3,57 @@ import { Stack } from 'expo-router';
 import { auth } from '../library/firebase';
 
 const RootLayout = () => {
-    const [loading, setLoading] = useState(true);
-    const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user: any) => {
-            setCurrentUser(user);
-            setLoading(false);
-        });
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user: any) => {
+      setCurrentUser(user);
+      setLoading(false);
+    });
 
-        return () => unsubscribe();
-    }, []);
+    return () => unsubscribe();
+  }, []);
 
-    if (loading) {
-        return null; // or a loading spinner if you prefer
-    }
+  if (loading) {
+    return null; // or a loading spinner if you prefer
+  }
 
-    return (
-        <Stack>
-            {currentUser ? (
-                <Stack.Screen
-                    name="(tabs)"
-                    options={{
-                        headerShown: false,
-                        title: 'Inicio',
-                    }}
-                />
-            ) : (
-                <Stack.Screen
-                    name="(auth)"
-                    options={{
-                        headerShown: false,
-                    }}
-                />
-            )}
-        </Stack>
-    );
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#9DD187', // Background color of the header
+        },
+        headerTintColor: '#2A2C38',
+      }}
+    >
+      {currentUser ? (
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+            title: 'Volver',
+          }}
+        />
+      ) : (
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            headerShown: false,
+            title: 'Volver',
+          }}
+        />
+      )}
+      <Stack.Screen
+        name="(chat)"
+        options={{
+          headerShown: false,
+          title: 'Chat Grupal',
+        }}
+      />
+    </Stack>
+  );
 };
 
 export default RootLayout;

@@ -4,17 +4,14 @@ import { Stack } from "expo-router";
 export default function ChatLayout() {
     return (
         <Stack
-          screenOptions={{
-            headerShown: false,
-            
-          }}
-        >
-          <Stack.Screen
-            name="Chat"
-            options={{
-                title: 'Chat',
+            screenOptions={{
+                title: "Chat Grupal",
+                headerStyle: {
+                    backgroundColor: "#9DD187",
+                },
+                headerTintColor: "#2A2C38",
             }}
-            />
+        >
         </Stack>
     )
 }

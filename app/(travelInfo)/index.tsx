@@ -176,6 +176,14 @@ export default function TravelInfo() {
         });
     }, []);
 
+    const onTimeChange = (event, selectedTime) => {
+        hideTimePicker();
+        if (selectedTime) {
+            setTempTime(selectedTime);
+            handleInputChange('time', selectedTime);
+        }
+    };
+
     const handleSaveChanges = async () => {
         if (travelData.takenPlaces > tempTotalPlaces) {
             setErrorChanges("ERROR: el número máximo de pasajeros no puede ser superior al numero de plazas reservadas.")
@@ -404,23 +412,23 @@ export default function TravelInfo() {
                             <Text style={styles.subtitle}>Hora de salida:</Text>
                             {editor ? (
                             <>
+                             <View style={styles.detailContainer}>
                             <TouchableOpacity style={styles.input} onPress={showTimePicker}>
                                 <Text>{moment(tempTime).format('HH:mm')}</Text>
                             </TouchableOpacity>
-                            {isTimePickerVisible && (
-                                <DateTimePicker
-                                    value={tempTime}
-                                    mode="time"
-                                    display="default"
-                                    onChange={(event, selectedTime) => {
-                                        if (event.type === 'set') {
-                                            handleInputChange('time', selectedTime);
-                                        }
-                                        hideTimePicker();
-                                    }}
-                                    minimumDate={minimunTime}
-                                />
-                            )}
+                            <View style={styles.detailTextContainer}>
+                                {isTimePickerVisible && (
+                                    <DateTimePicker
+                                        value={tempTime}
+                                        mode="time"
+                                        display="spinner"
+                                        is24Hour={true}
+                                        minimumDate={minimunTime}
+                                        onChange={onTimeChange}
+                                    />
+                                )}
+                            </View>
+                        </View>
                             </>
                         ) : (
                             <Text style={styles.FromTotext}>{travelData.time}</Text>
