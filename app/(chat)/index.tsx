@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { GiftedChat, IMessage, Bubble, SystemMessage, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
+import { GiftedChat, IMessage, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { db, auth } from '../../library/firebase';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { useLocalSearchParams } from 'expo-router';
-import { Image, ImageBackground, View, Text,  StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
+import { Image, ImageBackground, View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -100,8 +100,7 @@ const Chat: React.FC = () => {
             shadowOpacity: 0.3,
             shadowRadius: 3,
             elevation: 4,
-            marginBottom: 5,
-            
+            marginBottom: props.isLastMessage ? 20 : 5,
           },
           left: {
             backgroundColor: '#FFFFFF',
@@ -111,6 +110,7 @@ const Chat: React.FC = () => {
             shadowOpacity: 0.3,
             shadowRadius: 3,
             elevation: 4,
+            marginBottom: props.isLastMessage ? 20 : 5,
           },
         }}
         timeTextStyle={{
@@ -134,9 +134,6 @@ const Chat: React.FC = () => {
           <View style={styles.actionContainer}>
             <Ionicons name="add" color="#9DD187" size={28} />
           </View>
-        )}
-        renderComposer={(composerProps) => (
-          <Composer {...composerProps} textInputStyle={styles.composer} />
         )}
         renderSend={(sendProps) => (
           <Send {...sendProps}>
@@ -183,6 +180,8 @@ const Chat: React.FC = () => {
         maxComposerHeight={100}
         textInputProps={styles.composer}
         bottomOffset={insets.bottom}
+        alignTop
+        renderChatFooter={() => <View style={{ height: 20 }} />} // Extra padding at the bottom
       />
     </ImageBackground>
   );
@@ -199,9 +198,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     paddingLeft: 5,
     paddingRight: 5,
+    marginBottom: 10,
+    marginTop: -17,
   },
   actionContainer: {
-    height: 44,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: -8,
@@ -225,10 +226,11 @@ const styles = StyleSheet.create({
     height: 40,
   },
   sendContainer: {
+    height: 50,
+    marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
-    marginBottom: 5,
+    marginBottom: -8,
   },
   avatar: {
     width: 36,
@@ -236,7 +238,5 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
 });
-
-
 
 export default Chat;
