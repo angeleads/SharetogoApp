@@ -130,7 +130,7 @@ const Chat: React.FC = () => {
         containerStyle={{ backgroundColor: "#edf5ee" }}
         renderActions={() => (
           <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', left: 5 }}>
-            <Ionicons name="add" color="84c45c" size={28} />
+            <Ionicons name="add" color="#9DD187" size={28} />
           </View>
         )}
       />
@@ -174,14 +174,19 @@ const Chat: React.FC = () => {
 
 const styles = StyleSheet.create({
   composer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFF',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#84c45c',
+    borderColor: '#FFFFF',
     paddingHorizontal: 10,
     paddingTop: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
     fontSize: 16,
     marginVertical: 4,
+    height: 40,
   },
 });
 
