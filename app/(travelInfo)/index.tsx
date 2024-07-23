@@ -32,33 +32,33 @@ export default function TravelInfo() {
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [minimunTime, setMinimunTime] = useState(null);
 
-        // Create a new Date object with the current date and extracted hours/minutes
-        const [hours, minutes] = travelData.time ? travelData.time.split(':') : ['00', '00'];
-        const currentDate = new Date();
-        currentDate.setHours(parseInt(hours, 10));
-        currentDate.setMinutes(parseInt(minutes, 10));
-        const [tempTime, setTempTime] = useState(currentDate);
+    // Create a new Date object with the current date and extracted hours/minutes
+    const [hours, minutes] = travelData.time ? travelData.time.split(':') : ['00', '00'];
+    const currentDate = new Date();
+    currentDate.setHours(parseInt(hours, 10));
+    currentDate.setMinutes(parseInt(minutes, 10));
+    const [tempTime, setTempTime] = useState(currentDate);
+
+
+    //Creating formated Date
+    const todayDate = new Date();
+    const year = todayDate.getFullYear();
+    const month = String(todayDate.getMonth() + 1).padStart(2, '0');
+    const day = String(todayDate.getDate()).padStart(2, '0');
+    const formattedDate = `${day}/${month}/${year}`;  
     
-    
-        //Creating formated Date
-        const todayDate = new Date();
-        const year = todayDate.getFullYear();
-        const month = String(todayDate.getMonth() + 1).padStart(2, '0');
-        const day = String(todayDate.getDate()).padStart(2, '0');
-        const formattedDate = `${day}/${month}/${year}`;  
-        
-        const showTimePicker = () => {
-            if (travelData.title === formattedDate){
-                setMinimunTime(new Date()); // Set minimunTime to current date as a Date object
-            } else {
-                setMinimunTime(null);
-            }      
-            setTimePickerVisibility(true);
-        };       
-    
-        const hideTimePicker = () => {
-            setTimePickerVisibility(false);
-        };
+    const showTimePicker = () => {
+        if (travelData.title === formattedDate){
+            setMinimunTime(new Date()); // Set minimunTime to current date as a Date object
+        } else {
+            setMinimunTime(null);
+        }      
+        setTimePickerVisibility(true);
+    };       
+
+    const hideTimePicker = () => {
+        setTimePickerVisibility(false);
+    };
     
     const fetchTravelData = async (travelId) => {
         try {
@@ -155,6 +155,17 @@ export default function TravelInfo() {
         }
       };
 
+      const handleChatNavigation = () => {
+        route.push({
+          pathname: '/(chat)',
+          params: {
+            travelId: travelData.travelId,
+            userId: auth.currentUser?.uid,
+            creatorId: travelData.userId,
+          },
+        });
+      };
+
     const onRefresh = async () => {
         setRefreshing(true);
         try {
@@ -165,16 +176,6 @@ export default function TravelInfo() {
             setRefreshing(false);
         }
     };
-
-    useEffect(() => {
-        navigation.setOptions({
-          headerRight: () => (
-            <TouchableOpacity onPress={() => handleReserveButton()}>
-              <Text>Reserve</Text>
-            </TouchableOpacity>
-          ),
-        });
-    }, []);
 
     const onTimeChange = (event, selectedTime) => {
         hideTimePicker();
@@ -481,7 +482,7 @@ export default function TravelInfo() {
                             {travelData.buttonText !== "Completo" && travelData.buttonText !== "Reservar"?
                                 <TouchableOpacity
                                     style={styles.chatButton}
-                                    onPress={handleSaveChanges}
+                                    onPress={handleChatNavigation}
                                     disabled={isLoading}
                                 >
                                     <Text style={styles.buttonTextChat}>Chat</Text>
@@ -706,7 +707,7 @@ const styles = StyleSheet.create({
         marginLeft: '50%',
     },
     chatButton: {
-        backgroundColor: '#2A2C38',
+        backgroundColor: '#9DD187',
         width: '48%',
         height: 45,
         borderRadius: 8,
@@ -744,7 +745,7 @@ const styles = StyleSheet.create({
     },
     buttonTextChat: {
         fontSize: 18,
-        color: '#FFFF',
+        color: '#2A2C38',
         fontWeight: 'bold',
         textAlign: 'center',
     },

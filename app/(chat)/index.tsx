@@ -11,6 +11,7 @@ interface ChatParams {
   travelId: string;
   userId: string;
   creatorId: string;
+  [key: string]: string;
 }
 
 const Chat: React.FC = () => {
@@ -56,7 +57,7 @@ const Chat: React.FC = () => {
     if (profilePictures[userId]) return profilePictures[userId];
     const userDoc = await getDoc(doc(db, 'users', userId));
     const userData = userDoc.data();
-    const profilePicture = userData?.profilePicture || '';
+    const profilePicture = userData?.profilePicture || '@assets/adapative-icon2.png';
     setProfilePictures((prev) => ({ ...prev, [userId]: profilePicture }));
     return profilePicture;
   };
@@ -76,16 +77,47 @@ const Chat: React.FC = () => {
     }
   }, [travelId]);
 
-  const renderBubble = (props) => {
+  const renderBubble = (props: any) => {
     return (
       <Bubble
         {...props}
-        wrapperStyle={{
+        textStyle={{
           right: {
-            backgroundColor: '#84c45c',
+            color: '#2A2C38',
+            fontFamily: "CerebriSans-Book"
           },
           left: {
-            backgroundColor: '#b8ccab',
+            color: '#2A2C38',
+            fontFamily: "CerebriSans-Book"
+          },
+        }}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#9DD187',
+            borderTopRightRadius: 15,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 3,
+            elevation: 4,
+            
+          },
+          left: {
+            backgroundColor: '#FFFFFF',
+            borderTopRightRadius: 15,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 3,
+            elevation: 4,
+          },
+        }}
+        timeTextStyle={{
+          right: {
+            color: 'black',
+          },
+          left: {
+            color: 'black',
           },
         }}
       />
@@ -99,30 +131,34 @@ const Chat: React.FC = () => {
         containerStyle={{ backgroundColor: "#edf5ee" }}
         renderActions={() => (
           <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', left: 5 }}>
-            <Ionicons name="add" color="84c45c" size={28} />
+            <Ionicons name="add" color="#9DD187" size={28} />
           </View>
         )}
       />
     );
   };
 
-  const renderAvatar = (props) => {
-    const { currentMessage } = props;
+  const renderAvatar = (props: any) => {
+    const { currentMessage = {} } = props;
+    const { user = {} } = currentMessage;
+    const { avatar = 'https://www.example.com/default-avatar.png' } = user;
+  
     return (
       <Image
-        source={{ uri: currentMessage.user.avatar }}
+        source={{ uri: avatar }}
         style={{ width: 36, height: 36, borderRadius: 18 }}
       />
     );
   };
+  
 
-  const image = { uri: 'https://i.pinimg.com/originals/16/25/4b/16254b8e0cfcc9ebec4341e4709e5069.jpg' };
+  const image = { uri: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpapers.com%2Fwhite-screen-background&psig=AOvVaw22rHE-C1oqkdx2oaBr7xgF&ust=1721762469629000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPCfhZWvu4cDFQAAAAAdAAAAABAQ' };
 
   return (
     <ImageBackground source={image} style={{
-        flex: 1,
-        marginBottom: insets.bottom,
-      }}>
+      flex: 1,
+      marginBottom: insets.bottom,
+    }}>
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
@@ -143,14 +179,19 @@ const Chat: React.FC = () => {
 
 const styles = StyleSheet.create({
   composer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFF',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#84c45c',
+    borderColor: '#FFFFF',
     paddingHorizontal: 10,
     paddingTop: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
     fontSize: 16,
     marginVertical: 4,
+    height: 40,
   },
 });
 
