@@ -48,9 +48,8 @@ export default function Login()  {
       };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <KeyboardAwareScrollView>
+          <KeyboardAwareScrollView contentContainerStyle={styles.scrollViewContent}>
             <View style={styles.insideContainer}>
               <Image source={car_logo} style={styles.image} />
   
@@ -108,15 +107,14 @@ export default function Login()  {
                 <Text style={styles.howItWorks}>¿Cómo funciona?</Text>
               </TouchableOpacity>
           </View>
-          </KeyboardAwareScrollView>
           <View style={styles.register}>
             <Text style={styles.noCount}>¿No tienes cuenta? </Text>
             <TouchableOpacity onPress={() => route.push('/signUp')} style={styles.registerButton}>
               <Text style={styles.textRegisterButton}>Registrarse</Text>
             </TouchableOpacity>
             </View>
+          </KeyboardAwareScrollView>
         </View>
-      </TouchableWithoutFeedback>
     );
 };
 
@@ -137,7 +135,7 @@ const styles = StyleSheet.create({
       width: RFValue(300),
       height: RFValue(300),
       marginBottom: '-10%',
-      marginTop: RFValue(25),
+      marginTop: RFValue(5),
     },
   
     title: {
@@ -201,10 +199,7 @@ const styles = StyleSheet.create({
     },
     register: {
       flexDirection: 'row',
-      //position: 'absolute',
-      bottom: RFValue(10),
-      //justifyContent: "space-between",
-      //marginBottom: RFValue(-10),
+      bottom: RFValue(2),
       color: '#fff',
       fontWeight: 'bold',
     },
@@ -255,5 +250,11 @@ const styles = StyleSheet.create({
       marginLeft: '22%',
       alignContent: 'center',
     },
+    scrollViewContent: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    
   });
   

@@ -37,7 +37,7 @@ export default function MapCard() {
     } : defaultRegion;
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.touchableContainer}>
             <View style={styles.container}>
                 <MapView style={styles.map} region={region}>
                     {location && (
@@ -66,6 +66,10 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         marginHorizontal: 5,
         marginVertical: 6,
+        overflow: 'hidden',
+    },
+    touchableContainer: {
+        backgroundColor: 'white',
     },
     map: {
         width: '100%',

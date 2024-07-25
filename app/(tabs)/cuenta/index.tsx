@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, RefreshControl, Linking } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, RefreshControl, Linking, KeyboardAvoidingView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { doc, updateDoc, getDoc, collection } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
@@ -221,6 +221,7 @@ export default function Cuenta() {
             setEditor(false);
             console.log('User data updated successfully.');
           } else {
+            setEditor(false);
             console.log('No changes in user data.');
           }
         } else {

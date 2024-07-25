@@ -127,14 +127,21 @@ const Chat: React.FC = () => {
   const renderInputToolbar = (props: any) => {
     return (
       <InputToolbar
-        {...props}
-        containerStyle={{ backgroundColor: "#edf5ee" }}
-        renderActions={() => (
-          <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', left: 5 }}>
-            <Ionicons name="add" color="#9DD187" size={28} />
+      {...props}
+      containerStyle={styles.inputToolbarContainer}
+      renderActions={() => (
+        <View style={styles.actionContainer}>
+          <Ionicons name="add" color="#9DD187" size={28} />
+        </View>
+      )}
+      renderSend={(sendProps) => (
+        <Send {...sendProps}>
+          <View style={styles.sendContainer}>
+            <Ionicons name="arrow-forward" color="#9DD187" size={28} />
           </View>
-        )}
-      />
+        </Send>
+      )}
+    />
     );
   };
 
@@ -192,6 +199,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 4,
     height: 40,
+  },
+  inputToolbarContainer: {
+    backgroundColor: "#edf5ee",
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
+    marginBottom: 10,
+  },
+  actionContainer: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+   sendContainer: {
+    height: 50,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
