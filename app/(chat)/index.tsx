@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { GiftedChat, IMessage, Bubble, SystemMessage, Send, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, IMessage, Bubble, Send, InputToolbar } from 'react-native-gifted-chat';
 import { db, auth } from '../../library/firebase';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { useLocalSearchParams } from 'expo-router';
-import { Image, ImageBackground, View, Text,  StyleSheet} from 'react-native';
+import { Image, ImageBackground, View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -77,56 +77,48 @@ const Chat: React.FC = () => {
     }
   }, [travelId]);
 
-  const renderBubble = (props: any) => {
-    return (
-      <Bubble
-        {...props}
-        textStyle={{
-          right: {
-            color: '#2A2C38',
-            fontFamily: "CerebriSans-Book"
-          },
-          left: {
-            color: '#2A2C38',
-            fontFamily: "CerebriSans-Book"
-          },
-        }}
-        wrapperStyle={{
-          right: {
-            backgroundColor: '#9DD187',
-            borderTopRightRadius: 15,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
-            elevation: 4,
-            
-          },
-          left: {
-            backgroundColor: '#FFFFFF',
-            borderTopRightRadius: 15,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
-            elevation: 4,
-          },
-        }}
-        timeTextStyle={{
-          right: {
-            color: 'black',
-          },
-          left: {
-            color: 'black',
-          },
-        }}
-      />
-    );
-  };
+  const renderBubble = (props: any) => (
+    <Bubble
+      {...props}
+      textStyle={{
+        right: {
+          color: '#2A2C38',
+          fontFamily: "CerebriSans-Book"
+        },
+        left: {
+          color: '#2A2C38',
+          fontFamily: "CerebriSans-Book"
+        },
+      }}
+      wrapperStyle={{
+        right: {
+          backgroundColor: '#9DD187',
+          borderTopRightRadius: 15,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 3,
+          elevation: 4,
+        },
+        left: {
+          backgroundColor: '#FFFFFF',
+          borderTopRightRadius: 15,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 3,
+          elevation: 4,
+        },
+      }}
+      timeTextStyle={{
+        right: { color: 'black' },
+        left: { color: 'black' },
+      }}
+    />
+  );
 
-  const renderInputToolbar = (props: any) => {
-    return (
-      <InputToolbar
+  const renderInputToolbar = (props: any) => (
+    <InputToolbar
       {...props}
       containerStyle={styles.inputToolbarContainer}
       renderActions={() => (
@@ -142,14 +134,12 @@ const Chat: React.FC = () => {
         </Send>
       )}
     />
-    );
-  };
+  );
 
-  const renderAvatar = (props: any) => {
-    const { currentMessage = {} } = props;
-    const { user = {} } = currentMessage;
-    const { avatar = 'https://www.example.com/default-avatar.png' } = user;
-  
+  const renderAvatar = ({ currentMessage }: { currentMessage?: IMessage }) => {
+    const { user = {} } = currentMessage || {};
+    const avatar = user.avatar || 'https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623643_58jOINqUIeYmkrH7go1smPaiYujiyqit.jpg';
+
     return (
       <Image
         source={{ uri: avatar }}
@@ -157,15 +147,11 @@ const Chat: React.FC = () => {
       />
     );
   };
-  
 
   const image = { uri: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpapers.com%2Fwhite-screen-background&psig=AOvVaw22rHE-C1oqkdx2oaBr7xgF&ust=1721762469629000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPCfhZWvu4cDFQAAAAAdAAAAABAQ' };
 
   return (
-    <ImageBackground source={image} style={{
-      flex: 1,
-      marginBottom: insets.bottom,
-    }}>
+    <ImageBackground source={image} style={{ flex: 1, marginBottom: insets.bottom }}>
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
@@ -217,13 +203,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-   sendContainer: {
+  sendContainer: {
     height: 50,
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
 });
-
 
 export default Chat;
