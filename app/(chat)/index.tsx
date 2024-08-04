@@ -159,11 +159,9 @@ const Chat: React.FC = () => {
         textStyle={{
           right: {
             color: '#2A2C38',
-            fontFamily: "CerebriSans-Book"
           },
           left: {
             color: '#2A2C38',
-            fontFamily: "CerebriSans-Book"
           },
         }}
         wrapperStyle={{
