@@ -162,6 +162,7 @@ export default function TravelInfo() {
             travelId: travelData.travelId,
             userId: auth.currentUser?.uid,
             creatorId: travelData.userId,
+            travelDate: travelData.title,
           },
         });
       };
