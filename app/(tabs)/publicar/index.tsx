@@ -56,8 +56,6 @@ export default function Publicar() {
                 }
             });
     };
-    
-    
 
     return (
         <View style={styles.container}>

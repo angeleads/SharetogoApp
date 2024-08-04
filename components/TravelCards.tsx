@@ -101,6 +101,7 @@ export default function TravelCards(props: TravelCardsProps) {
         travelId: props.travelId,
         userId: auth.currentUser?.uid,
         creatorId: props.userId,
+        travelDate: props.title,
       },
     });
   };

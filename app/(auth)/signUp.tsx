@@ -108,7 +108,7 @@ export default function SignUp() {
             if (error.code === 'auth/weak-password') {
                 setPasswordError("Password should be at least 6 characters");
             } else if (error.code === 'auth/email-already-in-use') {
-                setEmailError("Este email ya esta en uso");
+                setEmailError("Este email ya está en uso");
             }
         }
     };

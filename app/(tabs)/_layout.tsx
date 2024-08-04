@@ -10,7 +10,7 @@ const TabsLayout = () => {
                     backgroundColor: '#9DD187',
                     shadowColor: '#000',
                     shadowOffset: { width: 0, height: 5 },
-                    shadowOpacity: 0.3,
+                    shadowOpacity: 0.7,
                     shadowRadius: 6,
                     elevation: 10,
                     height: (Platform.OS === 'ios') ? '11%' : '12%',
@@ -28,6 +28,9 @@ const TabsLayout = () => {
                 headerStyle: {
                     backgroundColor: '#9DD187', // Background color of the header
                     height:(Platform.OS === 'ios') ? 100 : 72, // Increase the header height
+                    shadowOffset: { width: 0, height: 5 },
+                    shadowOpacity: 0.7,
+                    shadowRadius: 6,
                 },
                 headerTintColor: '#2A2C38', // Optional: set the color of the header text and icons
                 headerTitleAlign: 'center', // Center the header title
@@ -39,7 +42,7 @@ const TabsLayout = () => {
             <Tabs.Screen
                 name="inicio"
                 options={{
-                    title: 'Inicio',
+                    title: 'INICIO',
                     tabBarIcon: ({ color, size }) => (
                         <FontAwesome name="home" color={color} size={(Platform.OS === 'ios') ? 30 : 25} />
                     ),
@@ -48,7 +51,7 @@ const TabsLayout = () => {
             <Tabs.Screen
                 name="publicar"
                 options={{
-                    title: 'Publicar',
+                    title: 'PUBLICAR',
                     tabBarIcon: ({ color, size }) => (
                         <Entypo name="add-to-list" color={color} size={(Platform.OS === 'ios') ? 30 : 25} />
                     ),
@@ -57,7 +60,7 @@ const TabsLayout = () => {
             <Tabs.Screen
                 name="reservar"
                 options={{
-                    title: 'Reservar',
+                    title: 'RESERVAR',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialIcons name="directions-car" color={color} size={(Platform.OS === 'ios') ? 30 : 25} />
                     ),
@@ -66,7 +69,7 @@ const TabsLayout = () => {
             <Tabs.Screen
                 name="cuenta"
                 options={{
-                    title: 'Cuenta',
+                    title: 'CUENTA',
                     tabBarIcon: ({ color, size }) => (
                         <FontAwesome5 name="user-alt" color={color} size={(Platform.OS === 'ios') ? 27 : 22} />
                     ),
